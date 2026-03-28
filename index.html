@@ -919,7 +919,7 @@ slider.addEventListener('click',e=>updateSlider(e.clientX));
       tile.style.top=(r*ph)+'%';
       tile.style.backgroundImage='url(assets/photo_before.png)';
       tile.style.backgroundSize=(COLS*100)+'% '+(ROWS*100)+'%';
-      tile.style.backgroundPosition=(-c*100)+'% '+(-r*100)+'%';
+      tile.style.backgroundPosition=(c*100/(COLS-1))+'% '+(r*100/(ROWS-1))+'%';
       container.appendChild(tile);
       tiles.push({el:tile,idx:r*COLS+c});
     }
