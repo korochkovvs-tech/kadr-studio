@@ -260,48 +260,46 @@ a{color:inherit;text-decoration:none}
 
 /* ─── BEFORE/AFTER ─── */
 .ba-section{background:var(--bg-elevated)}
-.ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
-.ba-visual{position:relative;aspect-ratio:4/3;overflow:hidden;border-radius:2px}
-.ba-placeholder{
-  width:100%;height:100%;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:12px;font-size:.8rem;color:var(--gray-dim);
-  letter-spacing:.15em;text-transform:uppercase;
+.ba-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:48px;align-items:center}
+.ba-slider-wrap{position:relative}
+.ba-labels{display:flex;justify-content:space-between;margin-bottom:12px}
+.ba-label-left,.ba-label-right{
+  font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;font-weight:600;
 }
-.ba-placeholder-left{
-  background:linear-gradient(135deg,#1a1610 0%,#120e0a 100%);
-  border:1px solid rgba(201,169,110,.1);
+.ba-label-left{color:var(--gray)}
+.ba-label-right{color:var(--accent)}
+.ba-slider-outer{display:flex;align-items:center;gap:12px}
+.ba-arrow{
+  width:44px;height:44px;flex-shrink:0;
+  border:1px solid var(--border);background:transparent;
+  color:var(--gray);font-size:1.1rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .3s;-webkit-tap-highlight-color:transparent;
 }
-.ba-placeholder-right{
-  background:linear-gradient(135deg,#1a1a1a 0%,#111 100%);
-  border:1px solid rgba(255,255,255,.06);
-}
-.ba-placeholder .ba-icon{font-size:2.5rem;opacity:.3}
+.ba-arrow:hover{border-color:var(--accent);color:var(--accent)}
 .ba-slider{
-  position:relative;height:400px;border-radius:2px;overflow:hidden;
+  position:relative;flex:1;aspect-ratio:3/2;overflow:hidden;border-radius:2px;
   cursor:ew-resize;
 }
-.ba-slider-before,.ba-slider-after{
-  position:absolute;inset:0;
-  display:flex;align-items:center;justify-content:center;
-  font-size:.8rem;color:var(--gray-dim);letter-spacing:.15em;text-transform:uppercase;
-}
-.ba-slider-before{
-  background:linear-gradient(135deg,#1a1610,#120e0a);
-  clip-path:inset(0 50% 0 0);transition:clip-path .1s linear;
-  z-index:2;
-}
-.ba-slider-after{background:linear-gradient(135deg,#1a1a1a,#111);z-index:1}
+.ba-slider-before,.ba-slider-after{position:absolute;inset:0}
+.ba-slider-before{clip-path:inset(0 50% 0 0);z-index:2;transition:clip-path .05s linear}
+.ba-slider-after{z-index:1}
 .ba-slider-line{
   position:absolute;top:0;bottom:0;left:50%;z-index:3;
-  width:2px;background:var(--accent);transform:translateX(-50%);
-  pointer-events:none;
+  width:3px;background:var(--accent);transform:translateX(-50%);
+  pointer-events:none;transition:left .05s linear;
 }
-.ba-slider-line::before{
-  content:'⟷';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  width:40px;height:40px;border-radius:50%;border:2px solid var(--accent);
-  background:var(--bg);display:flex;align-items:center;justify-content:center;
-  font-size:.7rem;color:var(--accent);
+.ba-slider-handle{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:44px;height:44px;border-radius:50%;
+  border:2px solid var(--accent);background:rgba(10,10,10,.9);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.75rem;color:var(--accent);
+  box-shadow:0 2px 12px rgba(0,0,0,.5);
+}
+.ba-hint{
+  text-align:center;margin-top:12px;
+  font-size:.72rem;color:var(--gray-dim);letter-spacing:.1em;
 }
 .ba-text h3{font-family:var(--serif);font-size:2rem;font-weight:300;margin-bottom:16px}
 .ba-text h3 em{font-style:italic;color:var(--accent)}
@@ -409,58 +407,35 @@ a{color:inherit;text-decoration:none}
   border-radius:4px;padding:4px;overflow:hidden;
 }
 
-/* ─── SHATTER 3D ANIMATION ─── */
-.shatter-section{
-  position:relative;
-  padding:0;
-  margin-bottom:40px;
+/* ─── EXAMPLES BY SERVICE ─── */
+.examples-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:20px;
 }
-.shatter-header{
-  max-width:960px;margin:0 auto;padding:100px 48px 40px;
-  text-align:center;
+.example-card{
+  background:var(--bg-card);border:1px solid var(--border);
+  padding:0 0 24px;overflow:hidden;
+  transition:border-color .3s,transform .3s;
 }
-.shatter-stage{
-  position:relative;
-  height:300vh;
+.example-card:hover{border-color:rgba(201,169,110,.2);transform:translateY(-3px)}
+.example-visual{height:180px;position:relative;overflow:hidden}
+.example-placeholder{
+  width:100%;height:100%;display:flex;
+  align-items:center;justify-content:center;
 }
-.shatter-sticky{
-  position:sticky;
-  top:0;
-  height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-direction:column;
-  overflow:hidden;
+.example-side{
+  flex:1;height:100%;display:flex;align-items:center;justify-content:center;
+  font-size:.75rem;letter-spacing:.1em;color:var(--gray-dim);
+  background:rgba(255,255,255,.02);
 }
-.shatter-label-top,.shatter-label-bottom{
-  font-family:var(--serif);font-size:clamp(1rem,3vw,1.8rem);
-  font-weight:300;letter-spacing:.3em;text-transform:uppercase;
-  pointer-events:none;
-  transition:opacity .3s;
-  position:absolute;
-  left:50%;transform:translateX(-50%);
+.example-side.example-after{background:rgba(201,169,110,.04);color:var(--accent-dim)}
+.example-divider{width:2px;height:100%;background:var(--border)}
+.example-card h4{
+  font-family:var(--serif);font-size:1.1rem;font-weight:400;
+  padding:16px 20px 6px;
 }
-.shatter-label-top{
-  top:12vh;
-  color:var(--gray);
-}
-.shatter-label-bottom{
-  bottom:12vh;
-  color:var(--accent);
-}
-.shatter-container{
-  width:min(600px,80vw);
-  aspect-ratio:3/2;
-  position:relative;
-  perspective:1200px;
-}
-.shatter-tile{
-  position:absolute;
-  background-repeat:no-repeat;
-  will-change:transform,opacity;
-  backface-visibility:hidden;
-}
+.example-card p{font-size:.82rem;color:var(--gray);line-height:1.6;font-weight:300;padding:0 20px}
+@media(max-width:768px){.examples-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:500px){.examples-grid{grid-template-columns:1fr}}
 
 /* ─── FOOTER ─── */
 .footer{
@@ -694,6 +669,7 @@ a{color:inherit;text-decoration:none}
     <a href="#services">Услуги</a>
     <a href="#portfolio">Портфолио</a>
     <a href="#pricing">Цены</a>
+    <a href="#reviews-section">Отзывы</a>
     <a href="#about">О нас</a>
     <a href="#contact" class="nav-cta">Заказать</a>
   </div>
@@ -705,8 +681,11 @@ a{color:inherit;text-decoration:none}
 <!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobileMenu">
   <a href="#services" class="mobile-link">Услуги</a>
+  <a href="#examples" class="mobile-link">Примеры работ</a>
   <a href="#portfolio" class="mobile-link">Портфолио</a>
   <a href="#pricing" class="mobile-link">Цены</a>
+  <a href="#reviews-section" class="mobile-link">Отзывы</a>
+  <a href="#faq-section" class="mobile-link">FAQ</a>
   <a href="#about" class="mobile-link">О нас</a>
   <a href="#contact" class="mobile-link mobile-cta">Заказать</a>
 </div>
@@ -785,6 +764,83 @@ a{color:inherit;text-decoration:none}
   </div>
 </section>
 
+<!-- EXAMPLES BY SERVICE -->
+<section class="section" id="examples">
+  <div class="section-label reveal">Примеры работ</div>
+  <div class="section-title reveal">Результат по каждой <em>услуге</em></div>
+  <div class="section-desc reveal">Наглядно — что вы получите. Наведите на карточку, чтобы увидеть эффект.</div>
+
+  <div class="examples-grid">
+    <div class="example-card reveal">
+      <div class="example-visual">
+        <div class="example-placeholder">
+          <div class="example-side">📷 ДО</div>
+          <div class="example-divider"></div>
+          <div class="example-side example-after">✨ ПОСЛЕ</div>
+        </div>
+      </div>
+      <h4>Реставрация</h4>
+      <p>Трещины, заломы, пятна — всё убрано за 2 часа. Лица остались подлинными.</p>
+    </div>
+    <div class="example-card reveal">
+      <div class="example-visual">
+        <div class="example-placeholder">
+          <div class="example-side">🔲 Ч/Б</div>
+          <div class="example-divider"></div>
+          <div class="example-side example-after">🌈 ЦВЕТ</div>
+        </div>
+      </div>
+      <h4>Колоризация</h4>
+      <p>Чёрно-белый снимок 1960-х ожил в естественных цветах эпохи.</p>
+    </div>
+    <div class="example-card reveal">
+      <div class="example-visual">
+        <div class="example-placeholder">
+          <div class="example-side">🔍 Мало px</div>
+          <div class="example-divider"></div>
+          <div class="example-side example-after">🖼 4K</div>
+        </div>
+      </div>
+      <h4>Апскейлинг</h4>
+      <p>Размер увеличен в 4 раза без потери качества. Готово для печати A3.</p>
+    </div>
+    <div class="example-card reveal">
+      <div class="example-visual">
+        <div class="example-placeholder">
+          <div class="example-side">🖼 Фото</div>
+          <div class="example-divider"></div>
+          <div class="example-side example-after">▶️ Видео</div>
+        </div>
+      </div>
+      <h4>Оживление</h4>
+      <p>Статичный портрет стал коротким видео — бабушка «улыбается» внукам.</p>
+    </div>
+    <div class="example-card reveal">
+      <div class="example-visual">
+        <div class="example-placeholder">
+          <div class="example-side">📦 50 фото</div>
+          <div class="example-divider"></div>
+          <div class="example-side example-after">💾 Архив</div>
+        </div>
+      </div>
+      <h4>Оцифровка архива</h4>
+      <p>50 снимков из альбома обработаны за 3 дня. Цифровой архив навсегда.</p>
+    </div>
+    <div class="example-card reveal">
+      <div class="example-visual">
+        <div class="example-placeholder">
+          <div class="example-side">📷 Старое</div>
+          <div class="example-divider"></div>
+          <div class="example-side example-after">🪦 HD</div>
+        </div>
+      </div>
+      <h4>Фото на памятник</h4>
+      <p>Подготовлен чёткий портрет для гравировки или фотокерамики.</p>
+    </div>
+  </div>
+  <p style="text-align:center;margin-top:24px;font-size:.75rem;color:var(--accent);letter-spacing:.1em">* Заглушки будут заменены на реальные фотографии работ</p>
+</section>
+
 <!-- PROCESS -->
 <section class="section">
   <div class="section-label reveal">Как мы работаем</div>
@@ -811,57 +867,38 @@ a{color:inherit;text-decoration:none}
   </div>
 </section>
 
-<!-- 3D SHATTER ANIMATION -->
-<section class="shatter-section" id="shatter">
-  <div class="shatter-header">
-    <div class="section-label reveal">Магия реставрации</div>
-    <div class="section-title reveal">Из осколков —<br>в <em>шедевр</em></div>
-    <p class="section-desc reveal" style="text-align:center;margin:0 auto 20px">Прокрутите вниз и наблюдайте, как разбитая фотография собирается воедино</p>
-  </div>
-  <div class="shatter-stage" id="shatterStage">
-    <div class="shatter-sticky">
-      <div class="shatter-label-top" id="shatterLabelTop">Повреждено</div>
-      <div class="shatter-container" id="shatterContainer"></div>
-      <div class="shatter-label-bottom" id="shatterLabelBottom">Восстановлено</div>
-    </div>
-  </div>
-</section>
-
 <!-- BEFORE / AFTER -->
 <section class="section ba-section" id="portfolio">
   <div class="section-label reveal">Портфолио</div>
   <div class="section-title reveal">До и <em>после</em></div>
-  <div class="section-desc reveal">Интерактивный слайдер — проведите для сравнения результата реставрации.</div>
+  <div class="section-desc reveal">Сравните результат реставрации — нажимайте стрелки или перетаскивайте линию.</div>
 
   <div class="ba-grid reveal">
-    <div class="ba-slider" id="baSlider">
-      <div class="ba-slider-before" id="baBefore">
-        <img src="assets/photo_before.png" alt="До реставрации" style="width:100%;height:100%;object-fit:cover">
+    <div class="ba-slider-wrap">
+      <div class="ba-labels">
+        <span class="ba-label-left">ДО</span>
+        <span class="ba-label-right">ПОСЛЕ</span>
       </div>
-      <div class="ba-slider-after">
-        <img src="assets/photo_after.png" alt="После реставрации" style="width:100%;height:100%;object-fit:cover">
+      <div class="ba-slider-outer">
+        <button class="ba-arrow ba-arrow-left" id="baArrowLeft" aria-label="Показать до">←</button>
+        <div class="ba-slider" id="baSlider">
+          <div class="ba-slider-before" id="baBefore">
+            <img src="assets/photo_before.png" alt="До реставрации" style="width:100%;height:100%;object-fit:cover">
+          </div>
+          <div class="ba-slider-after">
+            <img src="assets/photo_after.png" alt="После реставрации" style="width:100%;height:100%;object-fit:cover">
+          </div>
+          <div class="ba-slider-line" id="baLine">
+            <div class="ba-slider-handle">⟷</div>
+          </div>
+        </div>
+        <button class="ba-arrow ba-arrow-right" id="baArrowRight" aria-label="Показать после">→</button>
       </div>
-      <div class="ba-slider-line" id="baLine"></div>
+      <div class="ba-hint">Перетащите линию или нажмите стрелки для сравнения</div>
     </div>
     <div class="ba-text">
       <h3>Каждый снимок —<br>это чья-то <em>история</em></h3>
       <p>Семейный портрет середины XX века с множественными трещинами, заломами и пятнами — восстановлен за 2 часа. ИИ устранил все повреждения, мастер проверил подлинность лиц.</p>
-      <p style="color:var(--accent);font-size:.8rem">Проведите по слайдеру, чтобы сравнить результат →</p>
-    </div>
-  </div>
-
-  <div class="ba-examples reveal">
-    <div class="ba-example">
-      <h4>Семейные архивы</h4>
-      <p>Восстановление снимков 1940–1990-х годов из семейных альбомов. Работа с советской фотобумагой и плёнкой.</p>
-    </div>
-    <div class="ba-example">
-      <h4>Военные фото</h4>
-      <p>Деликатная реставрация фронтовых карточек. Колоризация военной формы с учётом исторической достоверности.</p>
-    </div>
-    <div class="ba-example">
-      <h4>Фото на памятник</h4>
-      <p>Подготовка портрета в высоком разрешении для гравировки или фотокерамики. Работаем с ритуальными агентствами.</p>
     </div>
   </div>
 </section>
@@ -995,7 +1032,7 @@ a{color:inherit;text-decoration:none}
 </section>
 
 <!-- REVIEWS -->
-<section class="section">
+<section class="section" id="reviews-section">
   <div class="section-label reveal">Отзывы</div>
   <div class="section-title reveal">Что говорят наши <em>клиенты</em></div>
   <div class="reviews-track-wrapper reveal">
@@ -1039,7 +1076,7 @@ a{color:inherit;text-decoration:none}
 </section>
 
 <!-- FAQ -->
-<section class="section">
+<section class="section" id="faq-section">
   <div class="section-label reveal">Вопросы</div>
   <div class="section-title reveal">Частые <em>вопросы</em></div>
   <div class="faq-list reveal">
@@ -1136,7 +1173,7 @@ a{color:inherit;text-decoration:none}
 <div class="msg-widget">
   <div class="msg-links" id="msgLinks">
     <a href="https://t.me/skyfallufa" target="_blank" class="msg-link"><span class="msg-link-icon">✈️</span> Telegram</a>
-    <a href="https://wa.me/79964021879" target="_blank" class="msg-link"><span class="msg-link-icon">💬</span> WhatsApp</a>
+    <a href="https://wa.me/79964021777" target="_blank" class="msg-link"><span class="msg-link-icon">💬</span> WhatsApp</a>
   </div>
   <button class="msg-toggle" id="msgToggle">💬</button>
 </div>
@@ -1211,150 +1248,30 @@ reveals.forEach(r=>revealObs.observe(r));
 
 // ─── Before/After slider ───
 const slider=document.getElementById('baSlider');
-const before=document.getElementById('baBefore');
-const line=document.getElementById('baLine');
+const baBefore=document.getElementById('baBefore');
+const baLine=document.getElementById('baLine');
+const baArrowLeft=document.getElementById('baArrowLeft');
+const baArrowRight=document.getElementById('baArrowRight');
 let dragging=false;
-function updateSlider(x){
+let baPercent=50;
+function setSlider(pct){
+  baPercent=Math.max(5,Math.min(95,pct));
+  baBefore.style.clipPath=`inset(0 ${100-baPercent}% 0 0)`;
+  baLine.style.left=baPercent+'%';
+}
+function updateSliderFromX(x){
   const rect=slider.getBoundingClientRect();
-  let pct=((x-rect.left)/rect.width)*100;
-  pct=Math.max(5,Math.min(95,pct));
-  before.style.clipPath=`inset(0 ${100-pct}% 0 0)`;
-  line.style.left=pct+'%';
+  setSlider(((x-rect.left)/rect.width)*100);
 }
 slider.addEventListener('mousedown',()=>dragging=true);
 slider.addEventListener('touchstart',()=>dragging=true,{passive:true});
 window.addEventListener('mouseup',()=>dragging=false);
 window.addEventListener('touchend',()=>dragging=false);
-window.addEventListener('mousemove',e=>{if(dragging)updateSlider(e.clientX)});
-window.addEventListener('touchmove',e=>{if(dragging)updateSlider(e.touches[0].clientX)},{passive:true});
-slider.addEventListener('click',e=>updateSlider(e.clientX));
-
-// ─── 3D Shatter Animation ───
-(function(){
-  const container=document.getElementById('shatterContainer');
-  const stage=document.getElementById('shatterStage');
-  const labelTop=document.getElementById('shatterLabelTop');
-  const labelBottom=document.getElementById('shatterLabelBottom');
-  if(!container||!stage) return;
-
-  const COLS=8, ROWS=6;
-  const tiles=[];
-  const scatterData=[];
-
-  for(let i=0;i<ROWS*COLS;i++){
-    scatterData.push({
-      tx:(Math.random()-0.5)*1000,
-      ty:(Math.random()-0.5)*600,
-      tz:Math.random()*600+100,
-      rx:(Math.random()-0.5)*540,
-      ry:(Math.random()-0.5)*540,
-      rz:(Math.random()-0.5)*270,
-      delay:Math.random()*0.25
-    });
-  }
-
-  for(let r=0;r<ROWS;r++){
-    for(let c=0;c<COLS;c++){
-      const tile=document.createElement('div');
-      tile.className='shatter-tile';
-      const pw=100/COLS, ph=100/ROWS;
-      tile.style.width='calc('+pw+'% + 1px)';
-      tile.style.height='calc('+ph+'% + 1px)';
-      tile.style.left=(c*pw)+'%';
-      tile.style.top=(r*ph)+'%';
-      tile.style.backgroundImage='url(assets/photo_before.png)';
-      tile.style.backgroundSize=(COLS*100)+'% '+(ROWS*100)+'%';
-      tile.style.backgroundPosition=(c*100/(COLS-1))+'% '+(r*100/(ROWS-1))+'%';
-      container.appendChild(tile);
-      tiles.push({el:tile,idx:r*COLS+c});
-    }
-  }
-
-  let ticking=false;
-  function onScroll(){
-    if(ticking) return;
-    ticking=true;
-    requestAnimationFrame(()=>{
-      const rect=stage.getBoundingClientRect();
-      const viewH=window.innerHeight;
-      const inView=rect.top<viewH && rect.bottom>0;
-
-      // progress: 0=top of stage at top of viewport, 1=scrolled through
-      let progress=(-rect.top)/(rect.height-viewH);
-      progress=Math.max(0,Math.min(1,progress));
-
-      // Three phases:
-      // Phase 1 (0.00–0.15): photo is whole (before), label "Повреждено" visible
-      // Phase 2 (0.15–0.50): photo shatters into pieces
-      // Phase 3 (0.50–0.85): pieces reassemble into after photo
-      // Phase 4 (0.85–1.00): photo is whole (after), label "Восстановлено" visible
-
-      let scatter=0; // 0=assembled, 1=fully scattered
-
-      if(progress<=0.15){
-        // Phase 1: assembled as before
-        scatter=0;
-      } else if(progress<=0.50){
-        // Phase 2: shattering
-        let p=(progress-0.15)/0.35;
-        p=p*p; // ease in
-        scatter=p;
-      } else if(progress<=0.85){
-        // Phase 3: reassembling
-        let p=(progress-0.50)/0.35;
-        p=1-Math.pow(1-p,2); // ease out
-        scatter=1-p;
-      } else {
-        // Phase 4: assembled as after
-        scatter=0;
-      }
-
-      // Swap image at midpoint
-      const showAfter=progress>0.50;
-
-      tiles.forEach(({el,idx})=>{
-        const s=scatterData[idx];
-        const d=s.delay;
-        // stagger per tile
-        const tileScatter=Math.max(0,Math.min(1, scatter + (scatter>0 ? d*0.4-0.2 : 0) ));
-
-        const tx=s.tx*tileScatter;
-        const ty=s.ty*tileScatter;
-        const tz=s.tz*tileScatter;
-        const rx=s.rx*tileScatter;
-        const ry=s.ry*tileScatter;
-        const rz=s.rz*tileScatter;
-        const opacity=1-tileScatter*0.5;
-
-        el.style.transform=`translate3d(${tx}px,${ty}px,${tz}px) rotateX(${rx}deg) rotateY(${ry}deg) rotateZ(${rz}deg)`;
-        el.style.opacity=opacity;
-        el.style.boxShadow=tileScatter>0.05?'0 2px 20px rgba(0,0,0,.5)':'none';
-
-        if(showAfter){
-          el.style.backgroundImage='url(assets/photo_after.png)';
-        }else{
-          el.style.backgroundImage='url(assets/photo_before.png)';
-        }
-      });
-
-      // Labels
-      if(inView){
-        // "Повреждено" — visible in phase 1
-        labelTop.style.opacity=progress<0.12? 1 : Math.max(0,1-(progress-0.12)/0.06);
-        // "Восстановлено" — visible in phase 4
-        labelBottom.style.opacity=progress>0.88? Math.min(1,(progress-0.88)/0.06) : 0;
-      }else{
-        labelTop.style.opacity=0;
-        labelBottom.style.opacity=0;
-      }
-
-      ticking=false;
-    });
-  }
-
-  window.addEventListener('scroll',onScroll,{passive:true});
-  onScroll();
-})();
+window.addEventListener('mousemove',e=>{if(dragging)updateSliderFromX(e.clientX)});
+window.addEventListener('touchmove',e=>{if(dragging)updateSliderFromX(e.touches[0].clientX)},{passive:true});
+slider.addEventListener('click',e=>updateSliderFromX(e.clientX));
+baArrowLeft.addEventListener('click',()=>setSlider(baPercent-20));
+baArrowRight.addEventListener('click',()=>setSlider(baPercent+20));
 
 // ─── Calculator ───
 (function(){
