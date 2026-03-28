@@ -420,29 +420,83 @@ a{color:inherit;text-decoration:none}
 }
 .example-card{
   background:var(--bg-card);border:1px solid var(--border);
-  padding:0 0 24px;overflow:hidden;
+  overflow:hidden;cursor:pointer;
   transition:border-color .3s,transform .3s;
 }
-.example-card:hover{border-color:rgba(201,169,110,.2);transform:translateY(-3px)}
-.example-visual{height:180px;position:relative;overflow:hidden}
-.example-placeholder{
-  width:100%;height:100%;display:flex;
-  align-items:center;justify-content:center;
+.example-card:hover{border-color:rgba(201,169,110,.25);transform:translateY(-3px)}
+.example-visual{
+  position:relative;height:220px;overflow:hidden;
 }
-.example-side{
-  flex:1;height:100%;display:flex;align-items:center;justify-content:center;
-  font-size:.75rem;letter-spacing:.1em;color:var(--gray-dim);
-  background:rgba(255,255,255,.02);
+.example-img-after,.example-img-before{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
 }
-.example-side.example-after{background:rgba(201,169,110,.04);color:var(--accent-dim)}
-.example-divider{width:2px;height:100%;background:var(--border)}
+.example-img-before{
+  opacity:0;transition:opacity .4s;z-index:2;
+}
+.example-card:hover .example-img-before{opacity:1}
+.example-badge-before,.example-badge-after{
+  position:absolute;top:12px;z-index:3;
+  font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;font-weight:700;
+  padding:4px 10px;
+}
+.example-badge-before{
+  left:12px;background:rgba(10,10,10,.8);color:var(--gray);
+  opacity:0;transition:opacity .3s;
+}
+.example-badge-after{
+  right:12px;background:rgba(201,169,110,.85);color:var(--bg);
+  transition:opacity .3s;
+}
+.example-card:hover .example-badge-before{opacity:1}
+.example-card:hover .example-badge-after{opacity:0}
+.example-zoom{
+  position:absolute;bottom:12px;left:50%;transform:translateX(-50%);
+  font-size:.7rem;color:var(--white);background:rgba(10,10,10,.8);
+  padding:6px 16px;z-index:3;letter-spacing:.1em;
+  opacity:0;transition:opacity .3s;
+}
+.example-card:hover .example-zoom{opacity:1}
+.example-play{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-size:2.5rem;color:var(--accent);z-index:3;
+  text-shadow:0 2px 12px rgba(0,0,0,.6);
+}
 .example-card h4{
   font-family:var(--serif);font-size:1.1rem;font-weight:400;
   padding:16px 20px 6px;
 }
-.example-card p{font-size:.82rem;color:var(--gray);line-height:1.6;font-weight:300;padding:0 20px}
+.example-card p{font-size:.82rem;color:var(--gray);line-height:1.6;font-weight:300;padding:0 20px 20px}
 @media(max-width:768px){.examples-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:500px){.examples-grid{grid-template-columns:1fr}}
+@media(max-width:500px){.examples-grid{grid-template-columns:1fr}.example-visual{height:250px}}
+
+/* ─── LIGHTBOX ─── */
+.lightbox{
+  position:fixed;inset:0;z-index:10000;
+  background:rgba(0,0,0,.95);backdrop-filter:blur(20px);
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  gap:16px;
+}
+.lightbox.open{display:flex}
+.lightbox-close{
+  position:absolute;top:20px;right:28px;
+  background:none;border:none;color:var(--white);font-size:1.5rem;
+  cursor:pointer;z-index:10;transition:color .3s;
+}
+.lightbox-close:hover{color:var(--accent)}
+.lightbox-title{
+  font-family:var(--serif);font-size:1.4rem;font-weight:300;
+  color:var(--white);letter-spacing:.05em;
+}
+.lightbox-toggle{display:flex;gap:4px}
+.lightbox-tab{
+  padding:8px 24px;background:transparent;
+  border:1px solid var(--border);color:var(--gray);
+  font-family:var(--sans);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;
+  cursor:pointer;transition:all .3s;font-weight:600;
+}
+.lightbox-tab.active{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.lightbox-tab:hover{border-color:var(--accent)}
+.lightbox-content{display:flex;align-items:center;justify-content:center}
 
 /* ─── FOOTER ─── */
 .footer{
@@ -775,78 +829,91 @@ a{color:inherit;text-decoration:none}
 <section class="section" id="examples">
   <div class="section-label reveal">Примеры работ</div>
   <div class="section-title reveal">Результат по каждой <em>услуге</em></div>
-  <div class="section-desc reveal">Наглядно — что вы получите. Наведите на карточку, чтобы увидеть эффект.</div>
+  <div class="section-desc reveal">Наведите на карточку для сравнения. Нажмите — откроется на весь экран.</div>
 
   <div class="examples-grid">
-    <div class="example-card reveal">
+    <div class="example-card reveal" onclick="openLightbox('assets/examples/restore_before.png','assets/examples/restore_after.png','Реставрация')">
       <div class="example-visual">
-        <div class="example-placeholder">
-          <div class="example-side">📷 ДО</div>
-          <div class="example-divider"></div>
-          <div class="example-side example-after">✨ ПОСЛЕ</div>
-        </div>
+        <img class="example-img-after" src="assets/examples/restore_after.png" alt="Реставрация после">
+        <img class="example-img-before" src="assets/examples/restore_before.png" alt="Реставрация до">
+        <div class="example-badge-before">ДО</div>
+        <div class="example-badge-after">ПОСЛЕ</div>
+        <div class="example-zoom">🔍 Увеличить</div>
       </div>
       <h4>Реставрация</h4>
-      <p>Трещины, заломы, пятна — всё убрано за 2 часа. Лица остались подлинными.</p>
+      <p>Трещины, заломы, пятна — всё убрано. Лица остались подлинными.</p>
     </div>
-    <div class="example-card reveal">
+    <div class="example-card reveal" onclick="openLightbox('assets/examples/color_before.png','assets/examples/color_after.png','Колоризация')">
       <div class="example-visual">
-        <div class="example-placeholder">
-          <div class="example-side">🔲 Ч/Б</div>
-          <div class="example-divider"></div>
-          <div class="example-side example-after">🌈 ЦВЕТ</div>
-        </div>
+        <img class="example-img-after" src="assets/examples/color_after.png" alt="Колоризация после">
+        <img class="example-img-before" src="assets/examples/color_before.png" alt="Колоризация до">
+        <div class="example-badge-before">ДО</div>
+        <div class="example-badge-after">ПОСЛЕ</div>
+        <div class="example-zoom">🔍 Увеличить</div>
       </div>
       <h4>Колоризация</h4>
-      <p>Чёрно-белый снимок 1960-х ожил в естественных цветах эпохи.</p>
+      <p>Чёрно-белый снимок 1965 года ожил в естественных цветах.</p>
     </div>
-    <div class="example-card reveal">
+    <div class="example-card reveal" onclick="openLightbox('assets/examples/upscale_before.png','assets/examples/upscale_after.png','Апскейлинг')">
       <div class="example-visual">
-        <div class="example-placeholder">
-          <div class="example-side">🔍 Мало px</div>
-          <div class="example-divider"></div>
-          <div class="example-side example-after">🖼 4K</div>
-        </div>
+        <img class="example-img-after" src="assets/examples/upscale_after.png" alt="Апскейлинг после">
+        <img class="example-img-before" src="assets/examples/upscale_before.png" alt="Апскейлинг до">
+        <div class="example-badge-before">ДО</div>
+        <div class="example-badge-after">ПОСЛЕ</div>
+        <div class="example-zoom">🔍 Увеличить</div>
       </div>
       <h4>Апскейлинг</h4>
-      <p>Размер увеличен в 4 раза без потери качества. Готово для печати A3.</p>
+      <p>Размытое фото стало чётким. Готово для печати в большом формате.</p>
     </div>
-    <div class="example-card reveal">
+    <div class="example-card reveal" onclick="openLightbox('assets/examples/animate_before.png',null,'Оживление','assets/examples/animate_after.mp4')">
       <div class="example-visual">
-        <div class="example-placeholder">
-          <div class="example-side">🖼 Фото</div>
-          <div class="example-divider"></div>
-          <div class="example-side example-after">▶️ Видео</div>
-        </div>
+        <img class="example-img-after" src="assets/examples/animate_before.png" alt="Оживление">
+        <div class="example-play">▶</div>
+        <div class="example-badge-before">ФОТО</div>
+        <div class="example-badge-after">ВИДЕО</div>
+        <div class="example-zoom">🔍 Смотреть видео</div>
       </div>
       <h4>Оживление</h4>
-      <p>Статичный портрет стал коротким видео — бабушка «улыбается» внукам.</p>
+      <p>Статичный портрет стал коротким видео с мимикой и движением.</p>
     </div>
-    <div class="example-card reveal">
+    <div class="example-card reveal" onclick="openLightbox('assets/examples/archive_before.png','assets/examples/archive_after.png','Оцифровка архива')">
       <div class="example-visual">
-        <div class="example-placeholder">
-          <div class="example-side">📦 50 фото</div>
-          <div class="example-divider"></div>
-          <div class="example-side example-after">💾 Архив</div>
-        </div>
+        <img class="example-img-after" src="assets/examples/archive_after.png" alt="Архив после">
+        <img class="example-img-before" src="assets/examples/archive_before.png" alt="Архив до">
+        <div class="example-badge-before">ДО</div>
+        <div class="example-badge-after">ПОСЛЕ</div>
+        <div class="example-zoom">🔍 Увеличить</div>
       </div>
       <h4>Оцифровка архива</h4>
-      <p>50 снимков из альбома обработаны за 3 дня. Цифровой архив навсегда.</p>
+      <p>Семейная коллекция обработана целиком. Цифровой архив навсегда.</p>
     </div>
-    <div class="example-card reveal">
+    <div class="example-card reveal" onclick="openLightbox('assets/examples/memorial_before.png','assets/examples/memorial_after.png','Фото на памятник')">
       <div class="example-visual">
-        <div class="example-placeholder">
-          <div class="example-side">📷 Старое</div>
-          <div class="example-divider"></div>
-          <div class="example-side example-after">🪦 HD</div>
-        </div>
+        <img class="example-img-after" src="assets/examples/memorial_after.png" alt="Памятник после">
+        <img class="example-img-before" src="assets/examples/memorial_before.png" alt="Памятник до">
+        <div class="example-badge-before">ДО</div>
+        <div class="example-badge-after">ПОСЛЕ</div>
+        <div class="example-zoom">🔍 Увеличить</div>
       </div>
       <h4>Фото на памятник</h4>
       <p>Подготовлен чёткий портрет для гравировки или фотокерамики.</p>
     </div>
   </div>
-  <p style="text-align:center;margin-top:24px;font-size:.75rem;color:var(--accent);letter-spacing:.1em">* Заглушки будут заменены на реальные фотографии работ</p>
 </section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose">✕</button>
+  <div class="lightbox-title" id="lightboxTitle"></div>
+  <div class="lightbox-toggle">
+    <button class="lightbox-tab active" id="lbTabBefore">ДО</button>
+    <button class="lightbox-tab" id="lbTabAfter">ПОСЛЕ</button>
+  </div>
+  <div class="lightbox-content">
+    <img id="lightboxImg" src="" alt="" style="max-width:90vw;max-height:75vh;object-fit:contain">
+    <video id="lightboxVideo" src="" autoplay loop muted playsinline style="max-width:90vw;max-height:75vh;object-fit:contain;display:none"></video>
+  </div>
+</div>
 
 <!-- PROCESS -->
 <section class="section">
@@ -1279,6 +1346,57 @@ window.addEventListener('touchmove',e=>{if(dragging)updateSliderFromX(e.touches[
 slider.addEventListener('click',e=>updateSliderFromX(e.clientX));
 baArrowLeft.addEventListener('click',()=>setSlider(baPercent-20));
 baArrowRight.addEventListener('click',()=>setSlider(baPercent+20));
+
+// ─── Lightbox ───
+let lbBefore='',lbAfter='',lbVideo='';
+function openLightbox(before,after,title,video){
+  const lb=document.getElementById('lightbox');
+  const img=document.getElementById('lightboxImg');
+  const vid=document.getElementById('lightboxVideo');
+  document.getElementById('lightboxTitle').textContent=title;
+  lbBefore=before||'';lbAfter=after||'';lbVideo=video||'';
+  if(lbVideo){
+    img.style.display='none';vid.style.display='block';vid.src=lbVideo;vid.play();
+    document.getElementById('lbTabBefore').textContent='ФОТО';
+    document.getElementById('lbTabAfter').textContent='ВИДЕО';
+  }else{
+    vid.style.display='none';img.style.display='block';
+    img.src=lbAfter;
+    document.getElementById('lbTabBefore').textContent='ДО';
+    document.getElementById('lbTabAfter').textContent='ПОСЛЕ';
+  }
+  document.getElementById('lbTabAfter').classList.add('active');
+  document.getElementById('lbTabBefore').classList.remove('active');
+  lb.classList.add('open');document.body.style.overflow='hidden';
+}
+document.getElementById('lightboxClose').addEventListener('click',()=>{
+  document.getElementById('lightbox').classList.remove('open');
+  document.getElementById('lightboxVideo').pause();
+  document.body.style.overflow='';
+});
+document.getElementById('lightbox').addEventListener('click',e=>{
+  if(e.target.id==='lightbox'){
+    document.getElementById('lightbox').classList.remove('open');
+    document.getElementById('lightboxVideo').pause();
+    document.body.style.overflow='';
+  }
+});
+document.getElementById('lbTabBefore').addEventListener('click',()=>{
+  const img=document.getElementById('lightboxImg');
+  const vid=document.getElementById('lightboxVideo');
+  document.getElementById('lbTabBefore').classList.add('active');
+  document.getElementById('lbTabAfter').classList.remove('active');
+  if(lbVideo){vid.style.display='none';vid.pause();img.style.display='block';img.src=lbBefore}
+  else{img.src=lbBefore}
+});
+document.getElementById('lbTabAfter').addEventListener('click',()=>{
+  const img=document.getElementById('lightboxImg');
+  const vid=document.getElementById('lightboxVideo');
+  document.getElementById('lbTabAfter').classList.add('active');
+  document.getElementById('lbTabBefore').classList.remove('active');
+  if(lbVideo){img.style.display='none';vid.style.display='block';vid.src=lbVideo;vid.play()}
+  else{img.src=lbAfter}
+});
 
 // ─── Calculator ───
 (function(){
