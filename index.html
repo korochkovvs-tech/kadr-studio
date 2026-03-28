@@ -68,36 +68,69 @@ a{color:inherit;text-decoration:none}
   position:fixed;top:0;left:0;right:0;z-index:100;
   padding:28px 48px;
   display:flex;align-items:center;justify-content:space-between;
-  mix-blend-mode:difference;
   transition:all .4s var(--ease);
+  background:transparent;
 }
-.nav.compact{
-  mix-blend-mode:normal;
+.nav.scrolled{
   padding:14px 48px;
   background:rgba(10,10,10,.95);
   backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
   border-bottom:1px solid var(--border);
   box-shadow:0 4px 24px rgba(0,0,0,.4);
 }
+.nav-left{display:flex;align-items:center;gap:16px}
 .nav-logo{
+  display:flex;align-items:center;gap:10px;
+  text-decoration:none;color:var(--white);
+}
+/* 3D spinning coin logo */
+.nav-logo-3d{
+  perspective:600px;width:34px;height:34px;flex-shrink:0;
+}
+.nav-logo-coin{
+  width:100%;height:100%;
+  transform-style:preserve-3d;
+  animation:coinSpin 6s linear infinite;
+  position:relative;
+}
+@keyframes coinSpin{
+  0%{transform:rotateY(0deg)}
+  100%{transform:rotateY(360deg)}
+}
+.nav-coin-face{
+  position:absolute;inset:0;
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--serif);font-size:1rem;font-weight:700;
+  backface-visibility:hidden;
+}
+.nav-coin-front{
+  background:linear-gradient(135deg,var(--accent),#e0c080);
+  color:var(--bg);
+}
+.nav-coin-back{
+  background:linear-gradient(135deg,#e0c080,var(--accent));
+  color:var(--bg);
+  transform:rotateY(180deg);
+}
+.nav-logo-text{
   font-family:var(--serif);font-weight:600;
-  font-size:1.4rem;letter-spacing:.15em;
-  color:var(--white);display:flex;align-items:center;gap:0;
-  transition:all .4s var(--ease);
+  font-size:1.3rem;letter-spacing:.12em;
+  color:var(--white);
 }
-.nav-logo span{font-weight:300;opacity:.5;font-size:.7em;margin-left:4px;transition:all .4s var(--ease)}
-.nav-logo-icon{
-  display:none;
-  width:32px;height:32px;border-radius:6px;
-  background:var(--accent);color:var(--bg);
-  font-family:var(--serif);font-size:.9rem;font-weight:600;
-  align-items:center;justify-content:center;
-  letter-spacing:0;
-  transition:all .4s var(--ease);
+.nav-logo-sub{
+  font-weight:300;opacity:.5;font-size:.65em;margin-left:4px;
 }
-.nav.compact .nav-logo-text{display:none}
-.nav.compact .nav-logo span{display:none}
-.nav.compact .nav-logo-icon{display:flex}
+/* Font size toggle */
+.nav-font-toggle{
+  padding:5px 12px;
+  border:1px solid var(--border);background:transparent;
+  color:var(--gray);font-family:var(--serif);font-size:.85rem;
+  cursor:pointer;transition:all .3s;letter-spacing:.05em;
+  -webkit-tap-highlight-color:transparent;font-weight:500;
+}
+.nav-font-toggle:hover{border-color:var(--accent);color:var(--accent)}
+.nav-font-toggle.active{border-color:var(--accent);color:var(--accent)}
 .nav-links{display:flex;gap:36px;align-items:center}
 .nav-links a{
   font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;
@@ -691,28 +724,6 @@ a{color:inherit;text-decoration:none}
 .reveal{opacity:0;transform:translateY(40px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
 .reveal.visible{opacity:1;transform:translateY(0)}
 
-/* ─── FONT SIZE CONTROL ─── */
-.font-control{
-  position:fixed;left:24px;bottom:90px;z-index:200;
-  display:flex;flex-direction:column;gap:4px;
-}
-.font-btn{
-  width:40px;height:40px;
-  border:1px solid var(--border);background:rgba(10,10,10,.95);
-  backdrop-filter:blur(8px);
-  color:var(--gray);cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  font-family:var(--serif);font-weight:600;
-  transition:all .3s;-webkit-tap-highlight-color:transparent;
-}
-.font-btn:hover{border-color:var(--accent);color:var(--accent)}
-.font-btn-plus{font-size:1rem;border-bottom:none}
-.font-btn-minus{font-size:.75rem}
-.font-btn-label{
-  font-family:var(--sans);font-size:.5rem;letter-spacing:.1em;
-  color:var(--gray-dim);text-align:center;margin-top:2px;
-}
-
 /* ─── COORDS DISPLAY ─── */
 .coords{
   position:fixed;bottom:20px;right:24px;z-index:90;
@@ -730,9 +741,11 @@ a{color:inherit;text-decoration:none}
 @media(max-width:768px){
   .section{padding:80px 24px}
   .nav{padding:20px 24px}
-  .nav.compact{padding:12px 24px}
+  .nav.scrolled{padding:12px 24px}
   .nav-links{display:none}
   .burger{display:flex}
+  .nav-logo-text{font-size:1rem}
+  .nav-font-toggle{padding:4px 8px;font-size:.75rem}
   .services-grid,.pricing-grid,.ba-grid,.about-grid,.contact-grid{grid-template-columns:1fr}
   .process-steps{flex-direction:column}
   .process-step{flex:1 1 100%}
@@ -740,8 +753,6 @@ a{color:inherit;text-decoration:none}
   .footer{flex-direction:column;align-items:flex-start}
   .ba-examples{flex-direction:column}
   .about-grid{gap:40px}
-  .font-control{left:16px;bottom:80px}
-  .font-btn{width:34px;height:34px}
 }
 </style>
 </head>
@@ -754,7 +765,18 @@ a{color:inherit;text-decoration:none}
 
 <!-- NAV -->
 <nav class="nav" id="nav">
-  <a href="#" class="nav-logo"><span class="nav-logo-icon">К</span><span class="nav-logo-text">КАДРЪ</span><span>studio</span></a>
+  <div class="nav-left">
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-3d">
+        <div class="nav-logo-coin">
+          <div class="nav-coin-face nav-coin-front">К</div>
+          <div class="nav-coin-face nav-coin-back">К</div>
+        </div>
+      </div>
+      <span class="nav-logo-text">КАДРЪ<span class="nav-logo-sub">studio</span></span>
+    </a>
+    <button class="nav-font-toggle" id="fontToggle" title="Размер шрифта">Аа</button>
+  </div>
   <div class="nav-links">
     <a href="#services">Услуги</a>
     <a href="#portfolio">Портфолио</a>
@@ -1262,13 +1284,6 @@ a{color:inherit;text-decoration:none}
   </div>
 </footer>
 
-<!-- FONT SIZE CONTROL -->
-<div class="font-control">
-  <button class="font-btn font-btn-plus" id="fontPlus" title="Увеличить шрифт">А+</button>
-  <button class="font-btn font-btn-minus" id="fontMinus" title="Уменьшить шрифт">А−</button>
-  <div class="font-btn-label">Шрифт</div>
-</div>
-
 <!-- SCROLL TO TOP -->
 <button class="scroll-top" id="scrollTop">↑</button>
 
@@ -1320,8 +1335,7 @@ if('ontouchstart' in window){dot.style.display='none';ring.style.display='none';
 // ─── Nav scroll ───
 const nav=document.getElementById('nav');
 window.addEventListener('scroll',()=>{
-  const heroH=window.innerHeight;
-  nav.classList.toggle('compact',window.scrollY>heroH*0.85);
+  nav.classList.toggle('scrolled',window.scrollY>80);
 },{passive:true});
 
 // ─── Mobile menu ───
@@ -1563,21 +1577,23 @@ document.querySelectorAll('.faq-q').forEach(q=>{
   });
 });
 
-// ─── Font Size Control ───
+// ─── Font Size Toggle ───
 (function(){
-  const sizes=[100,120,140];
+  const sizes=[100,125,150];
+  const labels=['Аа','Аа+','Аа++'];
   let level=0;
   try{level=parseInt(localStorage.getItem('kadr-font-level'))||0}catch(e){}
+  const btn=document.getElementById('fontToggle');
   function apply(){
     document.documentElement.style.fontSize=sizes[level]+'%';
+    btn.textContent=labels[level];
+    btn.classList.toggle('active',level>0);
     try{localStorage.setItem('kadr-font-level',level)}catch(e){}
   }
   apply();
-  document.getElementById('fontPlus').addEventListener('click',()=>{
-    if(level<sizes.length-1)level++;apply();
-  });
-  document.getElementById('fontMinus').addEventListener('click',()=>{
-    if(level>0)level--;apply();
+  btn.addEventListener('click',()=>{
+    level=(level+1)%sizes.length;
+    apply();
   });
 })();
 
