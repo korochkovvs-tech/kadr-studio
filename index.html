@@ -522,19 +522,6 @@ a{color:inherit;text-decoration:none}
 .calc-result .calc-total{font-family:var(--serif);font-size:2.4rem;font-weight:300;color:var(--accent)}
 .calc-result .calc-note{font-size:.78rem;color:var(--gray);margin-top:4px}
 
-/* ─── DRAG & DROP ─── */
-.dropzone{
-  border:2px dashed var(--border);border-radius:4px;
-  padding:48px 24px;text-align:center;
-  transition:all .3s;cursor:pointer;margin-top:20px;
-}
-.dropzone:hover,.dropzone.dragover{border-color:var(--accent);background:rgba(201,169,110,.03)}
-.dropzone-icon{font-size:2.5rem;margin-bottom:12px;opacity:.4}
-.dropzone-text{font-size:.85rem;color:var(--gray);font-weight:300}
-.dropzone-text span{color:var(--accent);text-decoration:underline;cursor:pointer}
-.dropzone-preview{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px;justify-content:center}
-.dropzone-preview img{width:80px;height:80px;object-fit:cover;border:1px solid var(--border);border-radius:2px}
-
 /* ─── TIMER ─── */
 .timer-bar{
   background:linear-gradient(90deg,rgba(201,169,110,.1),rgba(201,169,110,.05));
@@ -867,13 +854,12 @@ a{color:inherit;text-decoration:none}
     </div>
     <div class="example-card reveal" data-before="assets/examples/animate_before.png" data-after="assets/examples/animate_before.png" data-title="Оживление" data-video="assets/examples/animate_after.mp4">
       <div class="example-visual">
-        <img class="example-img-after" src="assets/examples/animate_before.png" alt="Фото">
+        <video class="example-img-after" src="assets/examples/animate_after.mp4" autoplay muted loop playsinline style="width:100%;height:100%;object-fit:cover"></video>
         <img class="example-img-before" src="assets/examples/animate_before.png" alt="Фото">
         <div class="example-line"><div class="example-line-handle">⟷</div></div>
         <div class="example-label-before">ФОТО</div>
         <div class="example-label-after">ВИДЕО</div>
-        <div class="example-play">▶</div>
-        <div class="example-zoom">🔍 Смотреть видео</div>
+        <div class="example-zoom">🔍 Увеличить</div>
       </div>
       <h4>Оживление</h4>
       <p>Статичный портрет стал коротким видео с мимикой и движением.</p>
@@ -1068,19 +1054,6 @@ a{color:inherit;text-decoration:none}
       <div class="timer-unit"><strong id="timerMins">00</strong><span>минут</span></div>
       <div class="timer-unit"><strong id="timerSecs">00</strong><span>секунд</span></div>
     </div>
-  </div>
-</section>
-
-<!-- DRAG & DROP -->
-<section class="section">
-  <div class="section-label reveal">Быстрая оценка</div>
-  <div class="section-title reveal">Загрузите фото для <em>оценки</em></div>
-  <div class="section-desc reveal">Перетащите фотографии — мы оценим сложность и назовём цену бесплатно.</div>
-  <div class="dropzone reveal" id="dropzone">
-    <div class="dropzone-icon">📁</div>
-    <div class="dropzone-text">Перетащите фото сюда или <span id="dropzoneBtn">выберите файлы</span></div>
-    <div class="dropzone-preview" id="dropzonePreview"></div>
-    <input type="file" id="dropzoneInput" multiple accept="image/*" style="display:none">
   </div>
 </section>
 
@@ -1496,33 +1469,6 @@ document.getElementById('lbTabAfter').addEventListener('click',()=>{
     el('timerSecs').textContent=String(s).padStart(2,'0');
   }
   setInterval(tick,1000);tick();
-})();
-
-// ─── Drag & Drop ───
-(function(){
-  const zone=document.getElementById('dropzone');
-  const input=document.getElementById('dropzoneInput');
-  const preview=document.getElementById('dropzonePreview');
-  const btn=document.getElementById('dropzoneBtn');
-  if(!zone) return;
-  btn.addEventListener('click',e=>{e.stopPropagation();input.click()});
-  zone.addEventListener('click',()=>input.click());
-  zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('dragover')});
-  zone.addEventListener('dragleave',()=>zone.classList.remove('dragover'));
-  zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('dragover');handleFiles(e.dataTransfer.files)});
-  input.addEventListener('change',()=>handleFiles(input.files));
-  function handleFiles(files){
-    Array.from(files).forEach(f=>{
-      if(!f.type.startsWith('image/')) return;
-      const reader=new FileReader();
-      reader.onload=e=>{
-        const img=document.createElement('img');
-        img.src=e.target.result;
-        preview.appendChild(img);
-      };
-      reader.readAsDataURL(f);
-    });
-  }
 })();
 
 // ─── Reviews Carousel ───
