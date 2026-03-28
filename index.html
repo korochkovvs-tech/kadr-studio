@@ -121,16 +121,59 @@ a{color:inherit;text-decoration:none}
 .nav-logo-sub{
   font-weight:300;opacity:.5;font-size:.65em;margin-left:4px;
 }
-/* Font size toggle */
-.nav-font-toggle{
-  padding:5px 12px;
-  border:1px solid var(--border);background:transparent;
-  color:var(--gray);font-family:var(--serif);font-size:.85rem;
-  cursor:pointer;transition:all .3s;letter-spacing:.05em;
-  -webkit-tap-highlight-color:transparent;font-weight:500;
+/* Font size dropdown */
+.nav-font-wrap{position:relative}
+.nav-font-btn{
+  padding:7px 16px;
+  border:1px solid var(--accent);background:transparent;
+  color:var(--accent);font-family:var(--sans);font-size:.72rem;
+  cursor:pointer;transition:all .3s;letter-spacing:.08em;
+  -webkit-tap-highlight-color:transparent;font-weight:600;
+  display:flex;align-items:center;gap:7px;border-radius:4px;
 }
-.nav-font-toggle:hover{border-color:var(--accent);color:var(--accent)}
-.nav-font-toggle.active{border-color:var(--accent);color:var(--accent)}
+.nav-font-btn:hover{background:rgba(201,169,110,.08)}
+.nav-font-btn .font-icon{font-size:.9rem}
+.nav-font-btn .font-text{}
+.nav-font-dropdown{
+  position:absolute;top:calc(100% + 8px);left:0;
+  min-width:190px;
+  background:rgba(10,10,10,.97);
+  border:1px solid var(--accent);border-radius:4px;
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  padding:6px 0;
+  opacity:0;pointer-events:none;transform:translateY(-6px);
+  transition:all .25s var(--ease);
+  box-shadow:0 8px 30px rgba(0,0,0,.5);
+}
+.nav-font-dropdown.open{opacity:1;pointer-events:auto;transform:translateY(0)}
+.nav-font-option{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 18px;cursor:pointer;transition:all .2s;
+  border:none;background:transparent;width:100%;text-align:left;
+  font-family:var(--sans);color:var(--gray);
+  -webkit-tap-highlight-color:transparent;
+}
+.nav-font-option:hover{background:rgba(255,255,255,.04);color:var(--white)}
+.nav-font-option.active{background:rgba(201,169,110,.12);color:var(--accent)}
+.nav-font-option .fo-dot{
+  width:8px;height:8px;border-radius:50%;
+  border:1.5px solid var(--gray-dim);flex-shrink:0;
+  transition:all .2s;
+}
+.nav-font-option.active .fo-dot{background:var(--accent);border-color:var(--accent)}
+.nav-font-option .fo-letter{
+  font-family:var(--serif);font-weight:600;flex-shrink:0;width:20px;text-align:center;
+}
+.nav-font-option .fo-label{font-size:.75rem;letter-spacing:.05em}
+.nav-font-option[data-size="0"] .fo-letter{font-size:.7rem}
+.nav-font-option[data-size="1"] .fo-letter{font-size:.9rem}
+.nav-font-option[data-size="2"] .fo-letter{font-size:1.15rem}
+
+@media(max-width:768px){
+  .nav-font-btn .font-text{display:none}
+  .nav-font-btn{padding:7px 10px}
+  .nav-font-dropdown{left:auto;right:0}
+}
 .nav-links{display:flex;gap:36px;align-items:center}
 .nav-links a{
   font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;
@@ -775,7 +818,29 @@ a{color:inherit;text-decoration:none}
       </div>
       <span class="nav-logo-text">КАДРЪ<span class="nav-logo-sub">studio</span></span>
     </a>
-    <button class="nav-font-toggle" id="fontToggle" title="Размер шрифта">Аа</button>
+    <div class="nav-font-wrap">
+      <button class="nav-font-btn" id="fontBtn">
+        <span class="font-icon">🔍</span>
+        <span class="font-text">Размер шрифта</span>
+      </button>
+      <div class="nav-font-dropdown" id="fontDropdown">
+        <button class="nav-font-option" data-size="0">
+          <span class="fo-dot"></span>
+          <span class="fo-letter">А</span>
+          <span class="fo-label">Мелкий</span>
+        </button>
+        <button class="nav-font-option active" data-size="1">
+          <span class="fo-dot"></span>
+          <span class="fo-letter">А</span>
+          <span class="fo-label">Обычный</span>
+        </button>
+        <button class="nav-font-option" data-size="2">
+          <span class="fo-dot"></span>
+          <span class="fo-letter">А</span>
+          <span class="fo-label">Крупный</span>
+        </button>
+      </div>
+    </div>
   </div>
   <div class="nav-links">
     <a href="#services">Услуги</a>
@@ -1577,24 +1642,39 @@ document.querySelectorAll('.faq-q').forEach(q=>{
   });
 });
 
-// ─── Font Size Toggle ───
+// ─── Font Size Dropdown ───
 (function(){
-  const sizes=[100,125,150];
-  const labels=['Аа','Аа+','Аа++'];
-  let level=0;
-  try{level=parseInt(localStorage.getItem('kadr-font-level'))||0}catch(e){}
-  const btn=document.getElementById('fontToggle');
+  const sizes=[87,100,125];
+  const fontBtn=document.getElementById('fontBtn');
+  const dropdown=document.getElementById('fontDropdown');
+  const options=document.querySelectorAll('.nav-font-option');
+  let level=1;
+  try{const s=localStorage.getItem('kadr-font-level');if(s!==null)level=parseInt(s)}catch(e){}
+
   function apply(){
     document.documentElement.style.fontSize=sizes[level]+'%';
-    btn.textContent=labels[level];
-    btn.classList.toggle('active',level>0);
+    options.forEach(o=>{
+      o.classList.toggle('active',parseInt(o.dataset.size)===level);
+    });
     try{localStorage.setItem('kadr-font-level',level)}catch(e){}
   }
   apply();
-  btn.addEventListener('click',()=>{
-    level=(level+1)%sizes.length;
-    apply();
+
+  fontBtn.addEventListener('click',e=>{
+    e.stopPropagation();
+    dropdown.classList.toggle('open');
   });
+
+  options.forEach(o=>{
+    o.addEventListener('click',e=>{
+      e.stopPropagation();
+      level=parseInt(o.dataset.size);
+      apply();
+      dropdown.classList.remove('open');
+    });
+  });
+
+  document.addEventListener('click',()=>dropdown.classList.remove('open'));
 })();
 
 // ─── Scroll to Top ───
